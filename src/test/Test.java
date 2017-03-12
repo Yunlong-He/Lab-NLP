@@ -4,9 +4,25 @@ package test;
 import java.util.*;
 import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.ling.*;
+import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.util.*;
 
 public class Test {
+
+    public void test1() {
+        String text = "This World is an amazing place";
+        text = "I like raining";
+        Properties props = new Properties();
+        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse, sentiment");
+        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+
+        Annotation annotation = pipeline.process(text);
+        List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+        for (CoreMap sentence : sentences) {
+            String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
+            System.out.println(sentiment + "\t" + sentence);
+        }
+    }
 
     public void testUnwrapped() throws Exception
     {
@@ -46,11 +62,12 @@ public class Test {
 
     public static final void main(String[] args) {
         Test test = new Test();
-        try {
-            test.testUnwrapped();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        test.test1();
+//        try {
+//            test.testUnwrapped();
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }
